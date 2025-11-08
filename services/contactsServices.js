@@ -41,3 +41,13 @@ export async function removeContact(id) {
     await updateContacts(allContacts);
     return result;
 }
+
+
+export async function updateContact(id, payload) {
+    const allContacts = await listContacts();
+    const index = allContacts.findIndex(item => item.id === id);
+    if (index === -1) return null;
+    allContacts[index] = {...allContacts[index], ...payload};
+    await updateContacts(allContacts);
+    return allContacts[index];
+}
