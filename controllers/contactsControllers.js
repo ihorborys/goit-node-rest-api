@@ -4,7 +4,7 @@ import HttpError from "../helpers/HttpError.js";
 
 export const getAllContacts = async (req, res) => {
     const contacts = await contactsServices.listContacts();
-    res.json(contacts);
+    return res.status(200).json(contacts);
 };
 
 export const getOneContact = async (req, res) => {
@@ -13,7 +13,7 @@ export const getOneContact = async (req, res) => {
     if (!contact) {
         throw HttpError(404, `Contact with id=${id} not found`);
     }
-    res.json(contact);
+    return res.status(200).json(contact);
 };
 
 export const deleteContact = async (req, res) => {
@@ -37,5 +37,5 @@ export const updateContact = async (req, res) => {
     if (!updContact) {
         throw HttpError(404, `Contact with id=${id} not found`);
     }
-    res.json(updContact);
+    return res.status(200).json(updContact);
 };
