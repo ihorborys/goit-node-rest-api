@@ -16,7 +16,14 @@ export const getOneContact = async (req, res) => {
     res.json(contact);
 };
 
-export const deleteContact = (req, res) => {
+export const deleteContact = async (req, res) => {
+    const {id} = req.params;
+    const delContact = await contactsServices.removeContact(id);
+    if (!delContact) {
+        throw HttpError(404, `Contact with id=${id} not found`);
+    }
+    return res.status(200).json(delContact);
+
 };
 
 export const createContact = async (req, res) => {
@@ -24,5 +31,11 @@ export const createContact = async (req, res) => {
     res.status(201).json(newContact);
 };
 
-export const updateContact = (req, res) => {
+export const updateContact = async (req, res) => {
+    const {id} = req.params;
+    const updContact = await contactsServices.updateContact(id, req.body);
+    if (!updContact) {
+        throw HttpError(404, `Contact with id=${id} not found`);
+    }
+    res.json(updContact);
 };
