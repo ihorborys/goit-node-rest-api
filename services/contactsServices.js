@@ -17,12 +17,11 @@ export function addContact(payload) {
 }
 
 // Повертає об'єкт видаленого контакту. Повертає null, якщо контакт з таким id не знайдений.
-export function removeContact(id) {
-    return Contact.destroy({
-        where: {
-            id
-        }
-    });
+export async function removeContact(id) {
+    const contact = await getContactById(id);
+    if (!contact) return null;
+    await contact.destroy();
+    return contact;
 }
 
 // Повертає об'єкт оновленого контакту. Повертає null, якщо контакт з таким id не знайдений.

@@ -13,7 +13,7 @@ export const createContactSchema = Joi.object({
         "any.required": "phone is required",
         "string.base": "phone must be a string"
     }),
-    favorite: Joi.boolean().required()
+    favorite: Joi.boolean()
 });
 
 export const updateContactSchema = Joi.object({
