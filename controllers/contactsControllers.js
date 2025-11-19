@@ -16,20 +16,20 @@ export const getAllContacts = async (req, res) => {
 //     return res.status(200).json(contact);
 // };
 //
-// export const deleteContact = async (req, res) => {
-//     const {id} = req.params;
-//     const delContact = await contactsServices.removeContact(id);
-//     if (!delContact) {
-//         throw HttpError(404, `Not found`);
-//     }
-//     return res.status(200).json(delContact);
+export const deleteContact = async (req, res) => {
+    const {id} = req.params;
+    const delContact = await contactsServices.removeContact(id);
+    if (!delContact) {
+        throw HttpError(404, `Not found`);
+    }
+    return res.status(200).json(delContact);
+
+};
 //
-// };
-//
-// export const createContact = async (req, res) => {
-//     const newContact = await contactsServices.addContact(req.body);
-//     res.status(201).json(newContact);
-// };
+export const createContact = async (req, res) => {
+    const newContact = await contactsServices.addContact(req.body);
+    res.status(201).json(newContact);
+};
 //
 // export const updateContact = async (req, res) => {
 //     const {id} = req.params;

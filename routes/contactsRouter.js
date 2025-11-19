@@ -2,8 +2,8 @@ import express from "express";
 import {
     getAllContacts,
     // getOneContact,
-    // deleteContact,
-    // createContact,
+    deleteContact,
+    createContact,
     // updateContact,
 } from "../controllers/contactsControllers.js";
 
@@ -16,9 +16,9 @@ contactsRouter.get("/", getAllContacts);
 
 // contactsRouter.get("/:id", getOneContact);
 //
-// contactsRouter.delete("/:id", deleteContact);
+contactsRouter.delete("/:id", deleteContact);
 //
-// contactsRouter.post("/", validateBody(createContactSchema), createContact);
+contactsRouter.post("/", createContact);
 //
 // contactsRouter.put("/:id", validateBody(updateContactSchema), updateContact);
 
