@@ -26,4 +26,7 @@ export const updateContactSchema = Joi.object({
     phone: Joi.string().messages({
         "string.base": "phone must be a string"
     }),
+    favorite: Joi.boolean().messages({
+        "boolean.base": "favorite must be a boolean (true or false)"
+    }),
 }).min(1);
