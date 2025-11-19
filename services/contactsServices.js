@@ -6,7 +6,7 @@ export function listContacts() {
     return Contact.findAll();
 }
 
-// Повертає об'єкт контакту з таким id. Повертає null, якщо контакт з таким id не знайдений.
+// Повертає об'єкт контакту з таким id.
 export function getContactById(id) {
     return Contact.findByPk(id);
 }
@@ -31,3 +31,11 @@ export async function updateContact(id, payload) {
     await contact.update(payload);
     return contact;
 }
+
+export const updateStatusContact = async (contactId, body) => {
+    const contact = await getContactById(contactId);
+    if (!contact) return null;
+    await contact.update(body);
+    return contact;
+};
+

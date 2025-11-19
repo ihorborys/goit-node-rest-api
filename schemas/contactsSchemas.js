@@ -30,3 +30,10 @@ export const updateContactSchema = Joi.object({
         "boolean.base": "favorite must be a boolean (true or false)"
     }),
 }).min(1);
+
+export const updateFavoriteSchema = Joi.object({
+    favorite: Joi.boolean().required().messages({
+        "any.required": "missing field favorite",
+        "boolean.base": "favorite must be a boolean"
+    })
+});
