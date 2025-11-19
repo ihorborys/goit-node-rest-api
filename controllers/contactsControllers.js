@@ -7,15 +7,15 @@ export const getAllContacts = async (req, res) => {
     return res.status(200).json(contacts);
 };
 
-// export const getOneContact = async (req, res) => {
-//     const {id} = req.params;
-//     const contact = await contactsServices.getContactById(id);
-//     if (!contact) {
-//         throw HttpError(404, `Not found`);
-//     }
-//     return res.status(200).json(contact);
-// };
-//
+export const getOneContact = async (req, res) => {
+    const {id} = req.params;
+    const contact = await contactsServices.getContactById(id);
+    if (!contact) {
+        throw HttpError(404, `Not found`);
+    }
+    return res.status(200).json(contact);
+};
+
 export const deleteContact = async (req, res) => {
     const {id} = req.params;
     const delContact = await contactsServices.removeContact(id);
