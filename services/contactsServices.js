@@ -6,7 +6,7 @@ export function listContacts() {
     return Contact.findAll();
 }
 
-// Повертає об'єкт контакту з таким id.
+// Повертає об'єкт контакту з таким id. Повертає null, якщо контакт з таким id не знайдений.
 export function getContactById(id) {
     return Contact.findByPk(id);
 }
@@ -15,7 +15,6 @@ export function getContactById(id) {
 export function addContact(payload) {
     return Contact.create(payload);
 }
-
 
 // Повертає об'єкт видаленого контакту. Повертає null, якщо контакт з таким id не знайдений.
 export function removeContact(id) {
@@ -26,13 +25,10 @@ export function removeContact(id) {
     });
 }
 
-//
-//
-// export async function updateContact(id, payload) {
-//     const allContacts = await listContacts();
-//     const index = allContacts.findIndex(item => item.id === id);
-//     if (index === -1) return null;
-//     allContacts[index] = {...allContacts[index], ...payload};
-//     await updateContacts(allContacts);
-//     return allContacts[index];
-// }
+// Повертає об'єкт оновленого контакту. Повертає null, якщо контакт з таким id не знайдений.
+export async function updateContact(id, payload) {
+    const contact = await getContactById(id);
+    if (!contact) return null;
+    await contact.update(payload);
+    return contact;
+}
