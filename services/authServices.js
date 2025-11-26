@@ -13,6 +13,7 @@ export const registerUser = async payload => {
     return User.create({...payload, password: hashPassword});
 };
 
+
 export const loginUser = async ({email, password}) => {
     const user = await findUser({email});
     if (!user) throw HttpError(401, "Email or password invalid");
@@ -25,5 +26,33 @@ export const loginUser = async ({email, password}) => {
     };
 
     const token = createToken(payload);
-    return token;
+
+    await user.update({token});
+
+    return {
+        token,
+        user: {
+            email: user.email,
+            subscription: user.subscription
+        }
+    };
+};
+
+export const refreshUser = async user => {
+    const token = createToken({id: user.id});
+
+    await user.update({token});
+
+    return {
+        token,
+        user: {
+            email: user.email,
+            subscription: user.subscription
+        }
+    };
+};
+
+export const logoutUser = async user => {
+    await user.update({token: null});
+    return true;
 };

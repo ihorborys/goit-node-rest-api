@@ -4,7 +4,12 @@ import validateBody from "../helpers/validateBody.js";
 
 import {loginSchema, registerSchema} from "../schemas/authSchemas.js";
 
-import {getCurrentController, loginController, registerController} from "../controllers/authcontrollers.js";
+import {
+    getCurrentController,
+    loginController,
+    registerController,
+    logoutController
+} from "../controllers/authcontrollers.js";
 
 import authenticate from "../middlewares/authenticate.js";
 
@@ -15,5 +20,7 @@ authRouter.post("/register", validateBody(registerSchema), registerController);
 authRouter.post("/login", validateBody(loginSchema), loginController);
 
 authRouter.get("/current", authenticate, getCurrentController);
+
+authRouter.post("/logout", authenticate, logoutController);
 
 export default authRouter;
