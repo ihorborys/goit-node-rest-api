@@ -2,14 +2,10 @@ import Contact from "../db/models/Contact.js";
 
 
 // Повертає масив контактів.
-export function listContacts() {
-    return Contact.findAll();
-}
+export const listContacts = (where) => Contact.findAll({where});
 
 // Повертає об'єкт контакту з таким id.
-export function getContactById(id) {
-    return Contact.findByPk(id);
-}
+export const getContactById = where => Contact.findOne({where});
 
 // Повертає об'єкт доданого контакту (з id).
 export function addContact(payload) {
@@ -17,23 +13,23 @@ export function addContact(payload) {
 }
 
 // Повертає об'єкт видаленого контакту. Повертає null, якщо контакт з таким id не знайдений.
-export async function removeContact(id) {
-    const contact = await getContactById(id);
+export const removeContact = async where => {
+    const contact = await getContactById(where);
     if (!contact) return null;
     await contact.destroy();
     return contact;
-}
+};
 
 // Повертає об'єкт оновленого контакту. Повертає null, якщо контакт з таким id не знайдений.
-export async function updateContact(id, payload) {
-    const contact = await getContactById(id);
+export const updateContact = async (where, payload) => {
+    const contact = await getContactById(where);
     if (!contact) return null;
     await contact.update(payload);
     return contact;
-}
+};
 
-export const updateStatusContact = async (contactId, body) => {
-    const contact = await getContactById(contactId);
+export const updateStatusContact = async (where, body) => {
+    const contact = await getContactById(where);
     if (!contact) return null;
     await contact.update(body);
     return contact;
