@@ -1,4 +1,4 @@
-import {loginUser, logoutUser, refreshUser, registerUser} from "../services/authServices.js";
+import {loginUser, logoutUser, refreshAvatar, refreshUser, registerUser} from "../services/authServices.js";
 
 
 export const registerController = async (req, res) => {
@@ -30,4 +30,12 @@ export const logoutController = async (req, res) => {
     await logoutUser(req.user);
 
     res.status(204).send();
+};
+
+export const refreshAvatarController = async (req, res) => {
+    const refreshedUser = await refreshAvatar(req);
+
+    res.status(200).json({
+        avatarURL: refreshedUser.avatarURL,
+    });
 };
