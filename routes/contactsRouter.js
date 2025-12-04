@@ -13,6 +13,8 @@ import {createContactSchema, updateContactSchema, updateFavoriteSchema} from "..
 
 import authenticate from "../middlewares/authenticate.js";
 
+import upload from "../middlewares/upload.js";
+
 const contactsRouter = express.Router();
 
 contactsRouter.use(authenticate);
@@ -23,7 +25,7 @@ contactsRouter.get("/:id", getOneContact);
 
 contactsRouter.delete("/:id", deleteContact);
 
-contactsRouter.post("/", validateBody(createContactSchema), createContact);
+contactsRouter.post("/", upload.single('avatar'), validateBody(createContactSchema), createContact);
 
 contactsRouter.put("/:id", validateBody(updateContactSchema), updateContact);
 
