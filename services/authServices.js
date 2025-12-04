@@ -5,12 +5,22 @@ import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
 
 import {createToken} from "../helpers/jwt.js";
+import gravatar from "gravatar";
 
 export const findUser = where => User.findOne({where});
 
 export const registerUser = async payload => {
-    const hashPassword = await bcrypt.hash(payload.password, 10);
-    return User.create({...payload, password: hashPassword});
+    const {email, password} = payload;
+
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    const avatarURL = gravatar.url(email, {
+        s: '250',
+        r: 'pg',
+        d: 'identicon',
+    }, true);
+
+    return User.create({...payload, password: hashPassword, avatarURL});
 };
 
 
