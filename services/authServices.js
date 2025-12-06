@@ -5,12 +5,27 @@ import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
 
 import {createToken} from "../helpers/jwt.js";
+import gravatar from "gravatar";
+
+import * as fs from "node:fs/promises";
+import path from "node:path";
+
+const postersDir = path.resolve("public", "avatars");
 
 export const findUser = where => User.findOne({where});
 
 export const registerUser = async payload => {
-    const hashPassword = await bcrypt.hash(payload.password, 10);
-    return User.create({...payload, password: hashPassword});
+    const {email, password} = payload;
+
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    const avatarURL = gravatar.url(email, {
+        s: '250',
+        r: 'pg',
+        d: 'identicon',
+    }, true);
+
+    return User.create({...payload, password: hashPassword, avatarURL});
 };
 
 
@@ -55,4 +70,20 @@ export const refreshUser = async user => {
 export const logoutUser = async user => {
     await user.update({token: null});
     return true;
+};
+
+export const refreshAvatar = async req => {
+    const user = req.user;
+    const file = req.file;
+
+    let avatar = null;
+
+    if (file) {
+        const newPath = path.join(postersDir, file.filename);
+        await fs.rename(file.path, newPath);
+        avatar = path.join("avatars", file.filename);
+    }
+
+    return user.update({avatarURL: avatar});
+
 };

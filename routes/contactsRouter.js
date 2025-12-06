@@ -13,6 +13,7 @@ import {createContactSchema, updateContactSchema, updateFavoriteSchema} from "..
 
 import authenticate from "../middlewares/authenticate.js";
 
+
 const contactsRouter = express.Router();
 
 contactsRouter.use(authenticate);
