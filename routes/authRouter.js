@@ -27,4 +27,6 @@ authRouter.post("/logout", authenticate, logoutController);
 
 authRouter.patch("/avatars", authenticate, upload.single('avatar'), refreshAvatarController);
 
+authRouter.patch("/auth/verify/:verificationToken", authenticate, upload.single('avatar'), refreshAvatarController);
+
 export default authRouter;

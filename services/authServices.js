@@ -1,14 +1,13 @@
 import bcrypt from "bcrypt";
-
 import User from "../db/models/User.js";
-
 import HttpError from "../helpers/HttpError.js";
-
 import {createToken} from "../helpers/jwt.js";
 import gravatar from "gravatar";
-
+import sendEmail from "../helpers/sendEmail.js";
 import * as fs from "node:fs/promises";
 import path from "node:path";
+
+const {PUBLIC_URL} = process.env;
 
 const postersDir = path.resolve("public", "avatars");
 
@@ -25,13 +24,27 @@ export const registerUser = async payload => {
         d: 'identicon',
     }, true);
 
-    return User.create({...payload, password: hashPassword, avatarURL});
+    const user = await User.create({...payload, password: hashPassword, avatarURL});
+
+    const verificationToken = createToken({email: payload.email});
+
+    const verifyEmail = {
+        to: payload.email,
+        subject: "Verify your email",
+        html: `<a href="${PUBLIC_URL}/auth/verify/${verificationToken}/"  target="_blank">Click to verify Your email></a>`,
+    };
+
+    await sendEmail(verifyEmail);
+
+    return user;
 };
 
 
 export const loginUser = async ({email, password}) => {
     const user = await findUser({email});
     if (!user) throw HttpError(401, "Email or password invalid");
+
+    if (!user.verify) throw HttpError(401, "Email not verified");
 
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) throw HttpError(401, "Email or password invalid");
