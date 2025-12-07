@@ -1,11 +1,12 @@
 import bcrypt from "bcrypt";
 import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
-import {createToken} from "../helpers/jwt.js";
+import {createToken, verifyToken} from "../helpers/jwt.js";
 import gravatar from "gravatar";
 import sendEmail from "../helpers/sendEmail.js";
 import * as fs from "node:fs/promises";
 import path from "node:path";
+import {nanoid} from "nanoid";
 
 const {PUBLIC_URL} = process.env;
 
@@ -24,19 +25,35 @@ export const registerUser = async payload => {
         d: 'identicon',
     }, true);
 
-    const user = await User.create({...payload, password: hashPassword, avatarURL});
+    // const verificationToken = nanoid();
+    //
+    const user = await User.create({
+        ...payload, password: hashPassword, avatarURL
+    });
 
     const verificationToken = createToken({email: payload.email});
+
 
     const verifyEmail = {
         to: payload.email,
         subject: "Verify your email",
-        html: `<a href="${PUBLIC_URL}/auth/verify/${verificationToken}/"  target="_blank">Click to verify Your email></a>`,
+        html: `<a href="${PUBLIC_URL}/api/auth/verify/${verificationToken}"  target="_blank">Click to verify Your email></a>`,
     };
 
     await sendEmail(verifyEmail);
 
     return user;
+};
+
+export const verifyUser = async verificationToken => {
+    const {data, error} = verifyToken(verificationToken);
+    if (error) throw HttpError(401, error.message);
+
+    const user = await findUser({email: data.email});
+    if (user.verify) HttpError(401, "User already verified");
+
+    await user.update({verify: true, verificationToken: null});
+    // await user.update({verificationToken: verificationToken});
 };
 
 

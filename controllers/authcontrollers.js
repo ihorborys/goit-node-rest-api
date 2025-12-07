@@ -1,4 +1,4 @@
-import {loginUser, logoutUser, refreshAvatar, refreshUser, registerUser} from "../services/authServices.js";
+import {loginUser, logoutUser, refreshAvatar, refreshUser, registerUser, verifyUser} from "../services/authServices.js";
 
 
 export const registerController = async (req, res) => {
@@ -11,6 +11,16 @@ export const registerController = async (req, res) => {
             avatarURL: newUser.avatarURL,
         }
     });
+};
+
+export const verifyController = async (req, res) => {
+    const {verificationToken} = req.params;
+    await verifyUser(verificationToken);
+
+    res.json({
+        message: "Email successfully verified",
+    });
+
 };
 
 export const loginController = async (req, res) => {

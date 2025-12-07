@@ -8,6 +8,7 @@ import {
     getCurrentController,
     loginController,
     registerController,
+    verifyController,
     logoutController,
     refreshAvatarController
 } from "../controllers/authcontrollers.js";
@@ -19,6 +20,8 @@ const authRouter = Router();
 
 authRouter.post("/register", validateBody(registerSchema), registerController);
 
+authRouter.get("/verify/:verificationToken", verifyController);
+
 authRouter.post("/login", validateBody(loginSchema), loginController);
 
 authRouter.get("/current", authenticate, getCurrentController);
@@ -27,6 +30,5 @@ authRouter.post("/logout", authenticate, logoutController);
 
 authRouter.patch("/avatars", authenticate, upload.single('avatar'), refreshAvatarController);
 
-authRouter.patch("/auth/verify/:verificationToken", authenticate, upload.single('avatar'), refreshAvatarController);
 
 export default authRouter;
