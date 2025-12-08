@@ -1,14 +1,10 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-
 import "dotenv/config";
-
 import connectDatabase from "./db/connectDatabase.js";
-
 import notFoundHandler from "./middlewares/notFoundHandler.js";
 import errorHandler from "./middlewares/errorHandler.js";
-
 import authRouter from "./routes/authRouter.js";
 import contactsRouter from "./routes/contactsRouter.js";
 

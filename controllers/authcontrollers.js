@@ -1,4 +1,12 @@
-import {loginUser, logoutUser, refreshAvatar, refreshUser, registerUser} from "../services/authServices.js";
+import {
+    loginUser,
+    logoutUser,
+    refreshAvatar,
+    refreshUser,
+    registerUser,
+    resendVerifyUser,
+    verifyUser
+} from "../services/authServices.js";
 
 
 export const registerController = async (req, res) => {
@@ -13,11 +21,28 @@ export const registerController = async (req, res) => {
     });
 };
 
+export const verifyController = async (req, res) => {
+    const {verificationToken} = req.params;
+    await verifyUser(verificationToken);
+
+    res.json({
+        message: "Email successfully verified",
+    });
+
+};
+
+export const resendVerifyController = async (req, res) => {
+    await resendVerifyUser(req.body);
+
+    res.json({
+        message: "Verify email resend successfully",
+    });
+};
+
 export const loginController = async (req, res) => {
     const result = await loginUser(req.body);
 
     res.json(result);
-
 };
 
 export const getCurrentController = async (req, res) => {
