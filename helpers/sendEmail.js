@@ -15,24 +15,9 @@ const nodemailerConfig = {
 
 const transport = nodemailer.createTransport(nodemailerConfig);
 
-// const payload = {
-//     from: UKR_NET_EMAIL,
-//     to: "webeb13305@idwager.com",
-//     subject: "Test email",
-//     html: "<strong>Test email</strong>",
-// };
-
 const sendEmail = (payload) => {
     const email = {...payload, from: UKR_NET_EMAIL};
     return transport.sendMail(email);
 };
 
 export default sendEmail;
-
-// transport.sendMail(email)
-//     .then((msg) => {
-//         console.log(msg);
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//     });

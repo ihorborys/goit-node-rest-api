@@ -6,7 +6,7 @@ import gravatar from "gravatar";
 import sendEmail from "../helpers/sendEmail.js";
 import * as fs from "node:fs/promises";
 import path from "node:path";
-import {nanoid} from "nanoid";
+
 
 const {PUBLIC_URL} = process.env;
 
@@ -25,14 +25,13 @@ export const registerUser = async payload => {
         d: 'identicon',
     }, true);
 
-    // const verificationToken = nanoid();
-    //
     const user = await User.create({
         ...payload, password: hashPassword, avatarURL
     });
 
     const verificationToken = createToken({email: payload.email});
 
+    await user.update({verificationToken});
 
     const verifyEmail = {
         to: payload.email,
@@ -53,7 +52,24 @@ export const verifyUser = async verificationToken => {
     if (user.verify) HttpError(401, "User already verified");
 
     await user.update({verify: true, verificationToken: null});
-    // await user.update({verificationToken: verificationToken});
+};
+
+export const resendVerifyUser = async ({email}) => {
+    const user = await findUser({email});
+    if (!user) throw HttpError(401, "Email not found");
+    if (user.verify) throw HttpError(400, "Verification has already been passed");
+
+    const verificationToken = createToken({email});
+
+    await user.update({verificationToken});
+
+    const verifyEmail = {
+        to: email,
+        subject: "Verify your email",
+        html: `<a href="${PUBLIC_URL}/api/auth/verify/${verificationToken}"  target="_blank">Click to verify Your email></a>`,
+    };
+
+    await sendEmail(verifyEmail);
 };
 
 
